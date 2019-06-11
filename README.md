@@ -1,6 +1,8 @@
-# Nuxt.js + Express + Socket.io Template
+# Hydro Control
 
-> A Nuxt.js project with Express and Socket.io
+> Projeto Hydro Control - Fametro
+
+> Nuxt.js + Socket.io
 
 ## Build Setup
 
