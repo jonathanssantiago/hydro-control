@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-toolbar
-                color="blue darken-2"
+                color="indigo darken-4"
                 dark
                 fixed
                 app
@@ -10,32 +10,67 @@
             <v-toolbar-title>HYDRO CONTROL</v-toolbar-title>
         </v-toolbar>
         <v-content>
-            <v-layout>
-                <v-flex xs6 lg3>
+            <v-layout row wrap>
+                <v-flex xs12 md4 lg3>
                     <v-card class="elevation-7" height="90vh">
-                        <v-card-title primary-title>
-                            <div class="headline">
-                                <!--                                <div class="headline">VAZÃO</div>-->
-                                <span>150 M/S</span> / <span>R$ 150.00</span>
-
+                        <v-card-text primary-title>
+                            <div class="text-xs-center">
+                                <span style="cursor: pointer;"><v-icon x-large left>keyboard_arrow_left</v-icon></span>
+                                <span><b style="font-size: 20pt;">DIÁRIO</b></span>
+                                <span style="cursor: pointer;"><v-icon x-large
+                                                                       right>keyboard_arrow_right</v-icon></span>
                             </div>
+                        </v-card-text>
+                        <v-divider/>
+                        <v-card-text primary-title>
+                            <h1 class="text-xs-center" style="font-size: 50pt">{{vazao}} m3</h1>
+                        </v-card-text>
+                        <v-divider/>
+                        <v-card-text primary-title>
+                            <h1 class="text-xs-center" style="font-size: 50pt">R$ {{preco}}</h1>
+                        </v-card-text>
+                        <v-divider/>
+                    </v-card>
+                </v-flex>
+                <v-flex xs12 md7 lg7 offset-lg1 offset-md1>
+                    <v-card class="elevation-7 mt-2" height="30vh">
+                        <v-card-title primary-title>
+                            <h1>Avisos</h1>
                         </v-card-title>
+
+                        <v-card-text primary-title>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+                                has been the industry's standard
+                                dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                                scrambled it to make a type specimen book.
+                                It has survived not only five centuries, but also the leap into electronic typesetting,
+                                remaining essentially unchanged. It was popularised
+                                in the 1960s with the release of
+                                Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+                                publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                        </v-card-text>
 
                         <v-card-title primary-title>
                             <div>
                             </div>
                         </v-card-title>
                     </v-card>
-                </v-flex>
-                <v-flex xs6 lg9>
 
+                    <v-card class="elevation-7 mt-3" height="56vh">
+                        <v-card-title primary-title>
+                            <div class="text-xs-center">
+                                <h1>Gráfico</h1>
+                            </div>
+                        </v-card-title>
+
+                    </v-card>
                 </v-flex>
             </v-layout>
         </v-content>
-        <v-footer color="blue darken-2" class="white--text" app>
-            <span>INOVATECH</span>
+        <v-footer color="indigo darken-4" class="white--text" app>
+            <span class="pl-4">INOVATECH</span>
             <v-spacer></v-spacer>
-            <span>&copy; 2019</span>
+            <span class="pr-4">&copy; Hydro Control 2019</span>
         </v-footer>
     </div>
 </template>
@@ -47,7 +82,8 @@
     export default {
         data() {
             return {
-                messages: []
+                preco: 0,
+                vazao: 0
             }
         },
         watch: {
@@ -56,8 +92,9 @@
             }
         },
         beforeMount() {
-            socket.on('teste', (message) => {
-                console.log(message);
+            socket.on('teste', (data) => {
+                this.preco = data.preco;
+                this.vazao = data.vazao;
             })
         },
         async asyncData() {

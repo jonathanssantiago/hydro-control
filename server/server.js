@@ -47,6 +47,6 @@ req.on('error', function(e) {
 
 io.on('connection', (socket) => {
   setInterval(() => {
-    socket.broadcast.emit('teste', Math.random())
+    socket.broadcast.emit('teste', {preco: (Math.random() * 100).toFixed(2), vazao: (Math.random() * 10).toFixed(2)})
   }, 1000)
 });
