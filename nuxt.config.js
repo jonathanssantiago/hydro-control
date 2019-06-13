@@ -17,7 +17,9 @@ module.exports = {
             src: 'assets/css/main.css',
         }
     ],
-
+    plugins: [
+        { src: '~plugins/vue-chartjs.js', ssr: false },
+    ],
     modules: ['~/io', '@nuxtjs/vuetify'],
     env: {
         WS_URL: process.env.WS_URL || 'http://127.0.0.1:3000'

@@ -17,15 +17,16 @@
                     <v-card class="elevation-7" height="100vh" style="background-color:#BBDEFB">
                         <v-card-text primary-title>
                             <div class="text-xs-center">
-                                <span style="cursor: pointer;" @click="prev"><v-icon x-large left>keyboard_arrow_left</v-icon></span>
+                                <span style="cursor: pointer;" @click="prev"><v-icon x-large
+                                                                                     left>keyboard_arrow_left</v-icon></span>
                                 <span><b style="font-size: 20pt;" v-if="tipo === 1">DIÁRIO</b></span>
                                 <span><b style="font-size: 20pt;" v-if="tipo === 2">SEMANAL</b></span>
                                 <span><b style="font-size: 20pt;" v-if="tipo === 3">MENSAL</b></span>
                                 <span style="cursor: pointer;" @click="next"><v-icon x-large
-                                                                       right>keyboard_arrow_right</v-icon></span>
+                                                                                     right>keyboard_arrow_right</v-icon></span>
                             </div>
                         </v-card-text>
-                        <v-divider/>    
+                        <v-divider/>
                         <v-card-text primary-title>
                             <span v-if="tipo === 1">
                                 <h1 class="text-xs-center" style="font-size: 50pt">{{atual.vazao}} m3</h1>
@@ -42,18 +43,18 @@
                             <span v-if="tipo === 1">
                                 <h1 class="text-xs-center" style="font-size: 50pt">R$ {{atual.preco}}</h1>
                             </span>
-                             <span v-if="tipo === 2">
+                            <span v-if="tipo === 2">
                                 <h1 class="text-xs-center" style="font-size: 50pt">R$ {{semanal.preco}}</h1>
                             </span>
-                             <span v-if="tipo === 3">
+                            <span v-if="tipo === 3">
                                 <h1 class="text-xs-center" style="font-size: 50pt">R$ {{mensal.preco}}</h1>
                             </span>
                         </v-card-text>
                         <v-divider/>
                         <v-card-text>
-                             <div class="text-xs-center">
-                            <img src="~/assets/logo.gif" alt="" width="250" height="250" style="padding: 1rem">
-                     </div>
+                            <div class="text-xs-center">
+                                <img src="~/assets/logo.gif" alt="" width="250" height="250" style="padding: 1rem">
+                            </div>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -64,28 +65,29 @@
                         </v-card-title>
 
                         <v-card-text primary-title>
-                            <p>
-                            <v-icon>warning</v-icon>   Problemas nos encanamentos, vazamentos pequenos em canos
-                               podem desperdiçar mais de 5000 litros de água a longo prazo.
-                            </p>
+                            <h3>
+                                <v-icon>warning</v-icon>
+                                Problemas nos encanamentos, vazamentos pequenos em canos
+                                podem desperdiçar mais de 5000 litros de água a longo prazo.
+                            </h3>
                         </v-card-text>
 
                         <v-card-title primary-title>
-                            <div>
-                            </div>
+
                         </v-card-title>
                     </v-card>
 
-                    <!-- <v-card class="elevation-7 mt-3" height="53vh">
+                    <v-card class="elevation-7 mt-3" height="53vh">
                         <v-card-title primary-title>
                             <div class="text-xs-center">
                                 <h1>Gráfico</h1>
 
-
-                                dasdas
+                                <LineChart :width="900" :height="400" :data="getChartDiario"
+                                           :options="{ maintainAspectRatio: false, responsive: true}"
+                                ></LineChart>
                             </div>
-                        </v-card-title> 
-                    </v-card>-->
+                        </v-card-title>
+                    </v-card>
                 </v-flex>
             </v-layout>
         </v-content>
@@ -95,47 +97,83 @@
 <script>
     import axios from '~/plugins/axios'
     import socket from '~/plugins/socket.io.js'
+    import LineChart from '~/components/LineChart'
 
     export default {
+        components: {
+            LineChart
+        },
         data() {
             return {
+                datacollection: null,
                 tipo: 1,
-                atual: {                        
+                atual: {
+                    preco: 0,
+                    vazao: 0,
+                },
+                semanal: {
                     preco: 0,
                     vazao: 0
                 },
-                 semanal: {
-                    preco: 0,
-                    vazao: 0
-                },
-                 mensal: {
+                mensal: {
                     preco: 0,
                     vazao: 0
                 }
             }
         },
-        watch: {
-            messages(val) {
-                console.log(val);                                                                                                                                                                                                                                                                       
+        computed: {
+            getChartDiario() {
+                return this.datacollection;
             }
         },
-        methods:{
-            next(){
-                if(this.tipo < 3){
+        mounted() {
+            this.fillData();
+        },
+        methods: {
+            next() {
+                if (this.tipo < 3) {
                     this.tipo++;
                 }
             },
-             prev(){
-                if(this.tipo > 1){
+            prev() {
+                if (this.tipo > 1) {
                     this.tipo--;
                 }
+            },
+
+            fillData(valorPreco, vazao) {
+                this.datacollection = {
+                    labels: valorPreco,
+                    datasets: [
+                        {
+                            label: 'Atual',
+                            backgroundColor: '#75b9f8',
+                            data: vazao
+                        }
+                    ]
+                }
+            },
+            getRandomInt() {
+                return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+            },
+            getRandomFloat() {
+                return (Math.random() * (50 - 5 + 1) + 5).toFixed(2)
             }
         },
         beforeMount() {
+            setInterval(() => {
+                let valorPreco = [this.getRandomFloat(), this.getRandomFloat(), this.getRandomFloat(), this.getRandomFloat(), this.getRandomFloat()];
+                let valorVazao = [this.getRandomInt(), this.getRandomInt(),this.getRandomInt(), this.getRandomInt(), this.getRandomInt()];
+
+                this.fillData(valorPreco, valorVazao);
+            }, 1000);
+
             socket.on('atual', (data) => {
                 this.atual.preco = data.preco;
                 this.atual.vazao = data.vazao;
-            })
+
+                // this.fillData(data, valorVazao);
+            });
 
             socket.on('semanal', (data) => {
                 this.semanal.preco = data.preco;
@@ -160,47 +198,11 @@
 </script>
 
 <style scoped>
-
-    .title {
-        font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-        display: block;
-        font-weight: 300;
-        font-size: 100px;
-        color: #35495e;
-        letter-spacing: 1px;
-    }
-
-    .subtitle {
-        font-weight: 300;
-        font-size: 42px;
-        color: #526488;
-        word-spacing: 5px;
-        padding-bottom: 15px;
-    }
-
-    .users {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .user {
-        margin: 10px 0;
-    }
-
-    .button, .button:visited {
-        display: inline-block;
-        color: black;
-        letter-spacing: 1px;
-        background-color: #fff;
-        border: 2px solid #000;
-        text-decoration: none;
-        text-transform: uppercase;
-        padding: 15px 45px;
-    }
-
-    .button:hover, .button:focus {
-        color: #fff;
-        background-color: #000;
+    .line-chart {
+        position: fixed;
+        left: 10%;
+        top: 10%;
+        width: 100%;
+        height: 100%;
     }
 </style>
