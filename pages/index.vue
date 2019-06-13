@@ -65,11 +65,11 @@
                         </v-card-title>
 
                         <v-card-text primary-title>
-                            <h3>
-                                <v-icon>warning</v-icon>
+                            <h1>
                                 Problemas nos encanamentos, vazamentos pequenos em canos
                                 podem desperdiçar mais de 5000 litros de água a longo prazo.
-                            </h3>
+                            </h1>
+
                         </v-card-text>
 
                         <v-card-title primary-title>
@@ -172,17 +172,27 @@
                 this.atual.preco = data.preco;
                 this.atual.vazao = data.vazao;
 
-                // this.fillData(data, valorVazao);
+                if(this.tipo === 1){
+                    // this.fillData(data, valorVazao);
+                }
             });
 
             socket.on('semanal', (data) => {
                 this.semanal.preco = data.preco;
                 this.semanal.vazao = data.vazao;
+
+                if(this.tipo === 2){
+                    // this.fillData(data, valorVazao);
+                }
             })
 
             socket.on('mensal', (data) => {
                 this.mensal.preco = data.preco;
                 this.mensal.vazao = data.vazao;
+
+                if(this.tipo === 3){
+                    // this.fillData(data, valorVazao);
+                }
             })
         },
         async asyncData() {
