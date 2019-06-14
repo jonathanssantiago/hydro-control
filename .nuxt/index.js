@@ -10,7 +10,7 @@ import { setContext, getLocation, getRouteData, normalizeError } from './utils'
 
 /* Plugins */
 
-import nuxt_plugin_vuetify_a65af3d4 from 'nuxt_plugin_vuetify_a65af3d4' // Source: ./vuetify.js (mode: 'all')
+import nuxt_plugin_vuetify_54ad8be2 from 'nuxt_plugin_vuetify_54ad8be2' // Source: ./vuetify.js (mode: 'all')
 import nuxt_plugin_vuechartjs_9a9555a4 from 'nuxt_plugin_vuechartjs_9a9555a4' // Source: ../plugins/vue-chartjs.js (mode: 'client')
 
 // Component: <NoSsr>
@@ -130,8 +130,8 @@ async function createApp(ssrContext) {
 
   // Plugin execution
 
-  if (typeof nuxt_plugin_vuetify_a65af3d4 === 'function') {
-    await nuxt_plugin_vuetify_a65af3d4(app.context, inject)
+  if (typeof nuxt_plugin_vuetify_54ad8be2 === 'function') {
+    await nuxt_plugin_vuetify_54ad8be2(app.context, inject)
   }
 
   if (process.client && typeof nuxt_plugin_vuechartjs_9a9555a4 === 'function') {

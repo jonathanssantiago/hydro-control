@@ -65,10 +65,10 @@
                         </v-card-title>
 
                         <v-card-text primary-title>
-                            <h1>
+                            <h3>
                                 Problemas nos encanamentos, vazamentos pequenos em canos
                                 podem desperdiçar mais de 5000 litros de água a longo prazo.
-                            </h1>
+                            </h3>
 
                         </v-card-text>
 
@@ -82,7 +82,7 @@
                             <div class="text-xs-center">
                                 <h1>Gráfico</h1>
 
-                                <LineChart :width="900" :height="400" :data="getChartDiario"
+                                <LineChart :width="600" :height="300" :data="getChartDiario"
                                            :options="{ maintainAspectRatio: false, responsive: true}"
                                 ></LineChart>
                             </div>
@@ -141,14 +141,14 @@
                 }
             },
 
-            fillData(valorPreco, vazao) {
+            fillData(valorPreco, valorVazao) {
                 this.datacollection = {
                     labels: valorPreco,
                     datasets: [
                         {
                             label: 'Atual',
                             backgroundColor: '#75b9f8',
-                            data: vazao
+                            data: valorVazao
                         }
                     ]
                 }
@@ -161,19 +161,14 @@
             }
         },
         beforeMount() {
-            setInterval(() => {
-                let valorPreco = [this.getRandomFloat(), this.getRandomFloat(), this.getRandomFloat(), this.getRandomFloat(), this.getRandomFloat()];
-                let valorVazao = [this.getRandomInt(), this.getRandomInt(),this.getRandomInt(), this.getRandomInt(), this.getRandomInt()];
-
-                this.fillData(valorPreco, valorVazao);
-            }, 1000);
+           
 
             socket.on('atual', (data) => {
                 this.atual.preco = data.preco;
                 this.atual.vazao = data.vazao;
 
                 if(this.tipo === 1){
-                    // this.fillData(data, valorVazao);
+                    this.fillData(data.grafico, data.grafico.sort((a,b) => a-b));
                 }
             });
 
@@ -182,7 +177,7 @@
                 this.semanal.vazao = data.vazao;
 
                 if(this.tipo === 2){
-                    // this.fillData(data, valorVazao);
+                    this.fillData(data.grafico, data.grafico.sort((a,b) => a-b));
                 }
             })
 
@@ -191,7 +186,7 @@
                 this.mensal.vazao = data.vazao;
 
                 if(this.tipo === 3){
-                    // this.fillData(data, valorVazao);
+                     this.fillData(data.grafico, data.grafico.sort((a,b) => a-b));
                 }
             })
         },

@@ -55,9 +55,11 @@ io.on('connection',  (socket) => {
     });
 
     axios.post(`${host}/consumo.php`).then(data => {
-      if(data.data != 0){
-        socket.broadcast.emit('atual', { preco: valorConsumoAtual, vazao: vazaoAtual, grafico: data.data });
-        graficoAtual = data.data;
+
+      if(data.data.length > 0){
+        let v = data.data.map(v => Number(v.vazao * 1000).toFixed(1));
+        socket.broadcast.emit('atual', { preco: valorConsumoAtual, vazao: vazaoAtual, grafico: v });
+        graficoAtual = v;
       }
     });
 
@@ -77,9 +79,10 @@ io.on('connection',  (socket) => {
     });
 
     axios.post(`${host}/semanalConsumo.php`).then(data => {
-      if(data.data != 0){
-        socket.broadcast.emit('atual', { preco: valorConsumoSemanal, vazao: vazaoSemanal, grafico: data.data });
-        graficoSemanal = data.data;
+      if(data.data.length > 0){
+        let v = data.data.map(v => Number(v.vazao * 1000).toFixed(1));
+        socket.broadcast.emit('atual', { preco: valorConsumoSemanal, vazao: vazaoSemanal, grafico: v });
+        graficoSemanal = v;
       }
     });
 
@@ -99,11 +102,12 @@ io.on('connection',  (socket) => {
     });
 
     axios.post(`${host}/mensalConsumo.php`).then(data => {
-      if(data.data != 0){
-        socket.broadcast.emit('atual', { preco: valorConsumoMensal, vazao: vazaoMensal, grafico: data.data });
-        graficoMensal = data.data;
+      if(data.data.length > 0){
+        let v = data.data.map(v => Number(v.vazao * 1000).toFixed(1));
+        socket.broadcast.emit('atual', { preco: valorConsumoMensal, vazao: vazaoMensal, grafico: v });
+        graficoMensal = v;
       }
     });
 
-  }, 2500)
+  }, 2000)
 });
